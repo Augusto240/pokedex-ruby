@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokédex Ruby</title>
+  <style>
+    body { font-family: sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { text-align: center; color: #333; }
+    .pokedex-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+    }
+    .pokemon-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+      padding: 20px;
+      text-decoration: none;
+      color: black;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .pokemon-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .pokemon-card img {
+      width: 96px;
+      height: 96px;
+      image-rendering: pixelated;
+    }
+    .pokemon-card p {
+      margin: 10px 0 0;
+      text-transform: capitalize;
+      font-weight: bold;
+    }
+    .search-form { text-align: center; margin-bottom: 30px; }
+    .search-form input { padding: 10px; width: 300px; border: 1px solid #ccc; border-radius: 5px; }
+    .search-form button { padding: 10px 15px; border: none; background-color: #337ab7; color: white; border-radius: 5px; cursor: pointer; }
+.pagination { text-align: center; margin: 40px 0; }
+    .pagination a, .pagination span {
+      padding: 10px 15px;
+      margin: 0 5px;
+      text-decoration: none;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      color: #337ab7;
+    }
+    .pagination span { color: #999; background-color: #f4f4f4; }
+    .pagination a:hover { background-color: #eee; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pokédex</h1>
+
+    <form action="/pokemon/search" method="GET" class="search-form">
+      <input type="text" name="query" placeholder="Buscar Pokémon pelo nome...">
+      <button type="submit">Buscar</button>
+    </form>
+
+    <div class="pokedex-grid">
+      <% @pokemons.each do |pokemon| %>
+        <% id = pokemon['url'].split('/')[-1] %>
+        <a href="/pokemon/<%= pokemon['name'] %>" class="pokemon-card">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= id %>.png" alt="Sprite do <%= pokemon['name'] %>">
+          <p>#<%= id %> - <%= pokemon['name'].capitalize %></p>
+        </a>
+      <% end %>
+    </div>
+
+    <div class="pagination">
+      <% if @page > 1 %>
+        <a href="/?page=<%= @page - 1 %>">Anterior</a>
+      <% end %>
+
+      <span>Página <%= @page %> de <%= @total_pages %></span>
+
+      <% if @page < @total_pages %>
+        <a href="/?page=<%= @page + 1 %>">Próxima</a>
+      <% end %>
+    </div>
+    </div>
+</body>
+</html>
