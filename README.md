@@ -2,8 +2,6 @@
 
 Uma Pokédex completa e interativa desenvolvida com Ruby e Sinatra, consumindo a [PokéAPI](https://pokeapi.co/).
 
-![Pokédex Ruby](https://user-images.githubusercontent.com/Augusto240/pokedex-ruby/main/screenshots/pokedex.png)
-
 ## ✨ Funcionalidades
 
 - **Exploração de Pokémon**
