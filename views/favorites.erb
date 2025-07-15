@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémons Favoritos - Pokédex Ruby</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Meus Favoritos</h1>
+      <div class="nav-tabs">
+        <a href="/" class="nav-tab">Todos</a>
+        <a href="/favorites" class="nav-tab active">Favoritos</a>
+      </div>
+    </header>
+
+    <div id="favorites-container">
+      <div class="pokedex-grid" id="favorites-grid">
+        <% if @favorites.empty? %>
+          <div class="empty-state">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/143.svg" alt="Sem favoritos" width="200">
+            <h2>Nenhum Pokémon favorito ainda!</h2>
+            <p>Vá para a lista de Pokémon e clique na estrela para adicionar favoritos.</p>
+            <a href="/" class="btn">Ver todos os Pokémon</a>
+          </div>
+        <% else %>
+          <% @favorites.each do |pokemon| %>
+            <div class="pokemon-card">
+              <a href="/pokemon/<%= pokemon[:id] %>">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= pokemon[:id] %>.png" alt="<%= pokemon[:name] %>">
+                <div class="pokemon-info">
+                  <p class="pokemon-name"><%= pokemon[:name].capitalize %></p>
+                  <span class="pokemon-id">#<%= pokemon[:id] %></span>
+                </div>
+              </a>
+              <button 
+                class="favorite-btn favorited"
+                data-id="<%= pokemon[:id] %>"
+                data-name="<%= pokemon[:name].capitalize %>"
+              >
+                <i class="fas fa-star"></i>
+              </button>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+        <div class="theme-toggle">
+    <i class="fas fa-moon"></i>
+    </div>
+
+    <script src="/js/theme.js"></script>
+  <script src="/js/pokedex.js"></script>
+</body>
+</html>

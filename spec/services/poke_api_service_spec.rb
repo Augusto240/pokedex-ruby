@@ -22,7 +22,7 @@ class PokeApiService
         entry['language']['name'] == 'en'
       end      
       pokemon_data['description'] = flavor_text_entry ? flavor_text_entry['flavor_text'].gsub("\n", " ").gsub("\f", " ") : "No description available."
-      
+  
       if species_response.parsed_response['evolution_chain']
         evolution_chain_url = species_response.parsed_response['evolution_chain']['url']
         pokemon_data['evolution_chain'] = get_evolution_chain(evolution_chain_url)
@@ -56,18 +56,19 @@ class PokeApiService
     
     chain_data = response.parsed_response['chain']
     evolution_chain = []
-        
+
     process_evolution_chain(chain_data, evolution_chain)
-    
-    evolution_chain
-  end
   
+    return evolution_chain 
+  end
+
   def process_evolution_chain(chain_data, evolution_chain)
     return unless chain_data
     
     species_name = chain_data['species']['name']
     species_url = chain_data['species']['url']
-    species_id = species_url.match(/\/pokemon-species\/(\d+)\//)[1]
+    
+    species_id = species_url.split('/')[-2]
     
     evolution_chain << {
       'name' => species_name,
@@ -81,4 +82,4 @@ class PokeApiService
       end
     end
   end
-end
+end 

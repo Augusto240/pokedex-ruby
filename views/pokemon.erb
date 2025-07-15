@@ -1,176 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-br">    
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pokédex: <%= @pokemon['name'].capitalize %></title>
-<style>
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 40px 20px;
-        }
-
-        .pokedex-card {
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            padding: 30px;
-            max-width: 800px; 
-            margin: 0 auto; 
-            text-align: center;
-        }
-
-        .pokedex-card h1 {
-            margin-top: 0;
-            text-transform: capitalize;
-            font-size: 2.5em;
-            color: #333;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokédex: <%= @pokemon['name'].capitalize %></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
     
-        .pokedex-card img {
-            width: 250px; 
-            height: 250px;
-            image-rendering: pixelated; 
-            margin-bottom: 15px;
-        }
-        
-        .types { list-style: none; padding: 0; display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;}
-        .types li { padding: 5px 15px; border-radius: 5px; color: white; font-weight: bold; text-transform: uppercase; font-size: 0.9em; }
-        .grass { background-color: #78C850; } .poison { background-color: #A040A0; } .fire { background-color: #F08030; } .water { background-color: #6890F0; } .bug { background-color: #A8B820; } .normal { background-color: #A8A878; } .electric { background-color: #F8D030; } .ground { background-color: #E0C068; } .fighting { background-color: #C03028; } .psychic { background-color: #F85888; } .rock { background-color: #B8A038; } .ice { background-color: #98D8D8; } .ghost { background-color: #705898; } .dragon { background-color: #7038F8; } .dark { background-color: #705848; } .steel { background-color: #B8B8D0; } .fairy { background-color: #EE99AC; } .flying { background-color: #A890F0; }
-        
-        .description {
-            grid-column: 1 / -1;
-            text-align: center;
-            margin-top: 15px;
-            font-style: italic;
-            color: #555;
-            font-size: 1.1em;
-            padding: 10px 0;
-        }
-        
-        .details-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px; 
-            text-align: left;
-            margin-top: 30px;
-        }
+            <div class="back-button">
+        <a href="/" title="Voltar para a página inicial">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        </div>
 
-        .stats-container, .abilities-container {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #eee;
-        }
-
-        h2 {
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-top: 0;
-            margin-bottom: 20px;
-            color: #333;
-        }
+  <div class="pokedex-card type-<%= @pokemon['types'][0]['type']['name'] %>">
+    <div class="pokemon-header">
+      <h1>#<%= @pokemon['id'] %> - <%= @pokemon['name'].capitalize %></h1>
+      <button 
+        class="favorite-detail-btn <%= @pokemon['favorite'] ? 'favorited' : '' %>"
+        data-id="<%= @pokemon['id'] %>"
+        data-name="<%= @pokemon['name'].capitalize %>"
+      >
+        <i class="<%= @pokemon['favorite'] ? 'fas' : 'far' %> fa-star"></i>
+      </button>
+    </div>
     
-        .stat-row {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            align-items: center;
-            margin-bottom: 10px;
-            gap: 15px;
-            font-size: 0.9em;
-        }
+    <img src="<%= @pokemon['sprites']['other']['official-artwork']['front_default'] %>" alt="Imagem do <%= @pokemon['name'] %>">
 
-        .stat-bar { background: #e0e0e0; border-radius: 5px; height: 12px; width: 100%; }
-        .stat-bar-inner { height: 100%; border-radius: 5px; }
-        
-        .abilities-container ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .abilities-container li {
-            background-color: #e9e9e9;
-            padding: 8px 12px;
-            border-radius: 5px;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
+    <ul class="types">
+      <% @pokemon['types'].each do |type_info| %>
+        <li class="<%= type_info['type']['name'] %>"><%= type_info['type']['name'].capitalize %></li>
+      <% end %>
+    </ul>
 
-        .abilities-container hr { margin: 20px 0; border: 0; border-top: 1px solid #eee; }
-        .abilities-container p { margin: 10px 0; }
+    <p class="description">"<%= @pokemon['description'] %>"</p>
 
-        .nav-buttons { display: flex; justify-content: space-between; margin-top: 40px; }
-        .nav-buttons a { text-decoration: none; background: #6c757d; color: white; padding: 12px 25px; border-radius: 8px; transition: background-color 0.2s; }
-        .nav-buttons a:hover { background-color: #5a6268; }
-        
-        .type-fire .stat-bar-inner { background-color: #F08030; }
-        .type-water .stat-bar-inner { background-color: #6890F0; }
-        .type-grass .stat-bar-inner { background-color: #78C850; }
-        .type-electric .stat-bar-inner { background-color: #F8D030; }
-        .type-psychic .stat-bar-inner { background-color: #F85888; }
-        .type-ice .stat-bar-inner { background-color: #98D8D8; }
-        .type-dragon .stat-bar-inner { background-color: #7038F8; }
-        .type-dark .stat-bar-inner { background-color: #705848; }
-        .type-fairy .stat-bar-inner { background-color: #EE99AC; }
-        .type-normal .stat-bar-inner { background-color: #A8A878; }
-        .type-fighting .stat-bar-inner { background-color: #C03028; }
-        .type-flying .stat-bar-inner { background-color: #A890F0; }
-        .type-poison .stat-bar-inner { background-color: #A040A0; }
-        .type-ground .stat-bar-inner { background-color: #E0C068; }
-        .type-rock .stat-bar-inner { background-color: #B8A038; }
-        .type-bug .stat-bar-inner { background-color: #A8B820; }
-        .type-ghost .stat-bar-inner { background-color: #705898; }
-        .type-steel .stat-bar-inner { background-color: #B8B8D0; }
-    </style>
-    </head>
-    <body>
-    <div class="pokedex-card type-<%= @pokemon['types'][0]['type']['name'] %>">
-        <h1>#<%= @pokemon['id'] %> - <%= @pokemon['name'].capitalize %></h1>
-        <img src="<%= @pokemon['sprites']['other']['official-artwork']['front_default'] %>" alt="Imagem do <%= @pokemon['name'] %>">
-
-        <ul class="types">
-        <% @pokemon['types'].each do |type_info| %>
-            <li class="<%= type_info['type']['name'] %>"><%= type_info['type']['name'].capitalize %></li>
-        <% end %>
-        </ul>
-
-        <p class="description">"<%= @pokemon['description'] %>"</p>
-
-        <div class="details-grid">
+    <div class="details-grid">
         <div class="stats-container">
-            <h2>Estatísticas Base</h2>
-            <% @pokemon['stats'].each do |stat_info| %>
+        <h2>Estatísticas Base</h2>
+        <% @pokemon['stats'].each do |stat_info| %>
             <div class="stat-row">
-                <span><%= stat_info['stat']['name'].capitalize %>: <strong><%= stat_info['base_stat'] %></strong></span>
-                <div class="stat-bar">
+            <span><%= stat_info['stat']['name'].capitalize %>: <strong><%= stat_info['base_stat'] %></strong></span>
+            <div class="stat-bar">
                 <div class="stat-bar-inner" style="width: <%= (stat_info['base_stat'] / 255.0) * 100 %>%;"></div>
-                </div>
+            </div>
+            </div>
+        <% end %>
+        </div>
+      <div class="abilities-container">
+        <h2>Habilidades</h2>
+        <ul>
+          <% @pokemon['abilities'].each do |ability_info| %>
+            <li><%= ability_info['ability']['name'].capitalize %></li>
+          <% end %>
+        </ul>
+        <hr>
+        <p><strong>Altura:</strong> <%= @pokemon['height'] / 10.0 %> m</p>
+        <p><strong>Peso:</strong> <%= @pokemon['weight'] / 10.0 %> kg</p>
+      </div>
+    </div>
+
+    <% if @pokemon['evolution_chain'] && @pokemon['evolution_chain'].size > 1 %>
+    <div class="evolution-chain">
+        <h2>Cadeia Evolutiva</h2>
+        <div class="evolution-stages">
+        <% @pokemon['evolution_chain'].each_with_index do |evolution, index| %>
+            <div class="evolution-stage <%= 'current-evolution' if evolution['name'] == @pokemon['name'] %>">
+            <a href="/pokemon/<%= evolution['name'] %>">
+                <img src="<%= evolution['image_url'] %>" alt="<%= evolution['name'] %>">
+                <p><%= evolution['name'].capitalize %></p>
+            </a>
+            </div>
+            <% if index < @pokemon['evolution_chain'].size - 1 %>
+            <div class="evolution-arrow">
+                <i class="fas fa-arrow-right"></i>
             </div>
             <% end %>
-        </div>
-        <div class="abilities-container">
-            <h2>Habilidades</h2>
-            <ul>
-            <% @pokemon['abilities'].each do |ability_info| %>
-                <li><%= ability_info['ability']['name'].capitalize %></li>
-            <% end %>
-            </ul>
-            <hr>
-            <p><strong>Altura:</strong> <%= @pokemon['height'] / 10.0 %> m</p>
-            <p><strong>Peso:</strong> <%= @pokemon['weight'] / 10.0 %> kg</p>
-        </div>
-        </div>
-        <div class="nav-buttons">
-            <% if @prev_pokemon_id %>
-                <a href="/pokemon/<%= @prev_pokemon_id %>">#<%= @prev_pokemon_id %> Anterior</a>
-            <% else %>
-                <span></span> <% end %>
-            <% if @next_pokemon_id %>
-                <a href="/pokemon/<%= @next_pokemon_id %>">Próximo #<%= @next_pokemon_id %></a>
-            <% end %>
+        <% end %>
         </div>
     </div>
-    </body>
-    </html>
+    <% end %>
+
+    <div class="nav-buttons">
+      <% if @prev_pokemon_id %>
+        <a href="/pokemon/<%= @prev_pokemon_id %>" class="nav-button prev-button">
+          <i class="fas fa-chevron-left"></i> #<%= @prev_pokemon_id %>
+        </a>
+      <% else %>
+        <span></span> 
+      <% end %>
+      
+      <a href="/" class="nav-button home-button">
+        <i class="fas fa-home"></i> Página Inicial
+      </a>
+      
+      <% if @next_pokemon_id %>
+        <a href="/pokemon/<%= @next_pokemon_id %>" class="nav-button next-button">
+          #<%= @next_pokemon_id %> <i class="fas fa-chevron-right"></i>
+        </a>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <script src="/js/theme.js"></script>
+  <script src="/js/pokedex.js"></script>
+</body>
+</html>

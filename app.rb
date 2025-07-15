@@ -2,19 +2,25 @@ require 'sinatra'
 require 'httparty'
 require 'rackup'
 require 'puma'
-require_relative 'services/poke_api_service.rb'
+require 'json'
+require_relative 'services/poke_api_service'
+require_relative 'config/database'
+require_relative 'models/pokemon'
+require_relative 'controllers/pokemon_controller'
 
 set :port, 5000
+set :public_folder, File.dirname(__FILE__) + '/public'
 
 before do
-  @poke_api = PokeApiService.new
+  @api_service = PokeApiService.new
+  @pokemon_controller = PokemonController.new(@api_service)
 end
 
 get '/' do
   @page = params.fetch('page', 1).to_i
   @per_page = 24
 
-  result = @poke_api.fetch_pokemons(page: @page, per_page: @per_page)
+  result = @pokemon_controller.list(page: @page, per_page: @per_page)
   
   if result
     @pokemons = result['results']
@@ -27,7 +33,7 @@ get '/' do
 end
 
 get '/pokemon/:name' do
-  @pokemon = @poke_api.find_pokemon(params['name'])
+  @pokemon = @pokemon_controller.find(params['name'])
   
   if @pokemon
     current_id = @pokemon['id']
@@ -40,8 +46,64 @@ get '/pokemon/:name' do
   end
 end
 
-
 get '/pokemon/search' do
   query = params['query'].downcase.strip
-  redirect "/pokemon/#{query}"
+  
+  pokemon = @api_service.find_pokemon(query)
+  
+  if pokemon
+    redirect "/pokemon/#{query}"
+  else
+    status 404
+    erb :not_found
+  end
+end
+
+get '/api/search' do
+  content_type :json
+  query = params['query'].downcase.strip
+  
+  return { results: [] }.to_json if query.empty?
+  
+  result = @api_service.search_pokemons(query, limit: 10)
+  
+  { results: result }.to_json
+end
+
+post '/api/pokemon/:id/favorite' do
+  content_type :json
+  id = params['id'].to_i
+  
+  if @pokemon_controller.toggle_favorite(id)
+    {success: true}.to_json
+  else
+    status 400
+    {success: false, error: "Pokémon não encontrado"}.to_json
+  end
+end
+
+get '/favorites' do
+  favorites_data = Pokemon.where(favorite: true).map do |pokemon|
+    {
+      id: pokemon.pokemon_id,
+      name: pokemon.name
+    }
+  end
+  
+  @favorites = favorites_data
+  erb :favorites
+end
+
+get '/api/favorites' do
+  content_type :json
+  favorites = Pokemon.where(favorite: true).pluck(:pokemon_id, :name)
+  favorites_data = favorites.map do |id, name|
+    {
+      id: id,
+      name: name,
+      image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/#{id}.png"
+    }
+  end
+  
+  {pokemons: favorites_data}.to_json
 end
