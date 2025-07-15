@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minhas Equipes - Pokédex Ruby</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/teams.css">
+    <link rel="stylesheet" href="/css/nav-menu.css">
+  <script src="/js/nav-menu.js" defer></script>
+</head>
+<body>
+  <%= erb :_header %>
+  <div class="back-button">
+    <a href="/" title="Voltar para a página inicial">
+      <i class="fas fa-arrow-left"></i>
+    </a>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>Minhas Equipes</h1>
+      <div class="nav-tabs">
+        <a href="/" class="nav-tab">Pokédex</a>
+        <a href="/favorites" class="nav-tab">Favoritos</a>
+        <a href="/teams" class="nav-tab active">Equipes</a>
+      </div>
+    </header>
+
+    <div class="teams-header">
+      <h2>Gerencie suas equipes Pokémon</h2>
+      <a href="/teams/new" class="btn-primary">
+        <i class="fas fa-plus"></i> Nova Equipe
+      </a>
+    </div>
+
+    <div class="teams-grid">
+      <% if @teams.empty? %>
+        <div class="empty-state">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/25.svg" alt="Sem equipes" width="200">
+          <h2>Nenhuma equipe criada ainda!</h2>
+          <p>Crie sua primeira equipe Pokémon para começar.</p>
+          <a href="/teams/new" class="btn">Criar Equipe</a>
+        </div>
+      <% else %>
+        <% @teams.each do |team| %>
+          <div class="team-card">
+            <a href="/teams/<%= team.id %>" class="team-link">
+              <h3><%= team.name %></h3>
+              <div class="team-preview">
+                <% team.team_pokemons.order(:position).limit(6).each do |pokemon| %>
+                  <div class="team-pokemon-icon">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= pokemon.pokemon_id %>.png" 
+                         alt="<%= pokemon.pokemon_name %>">
+                  </div>
+                <% end %>
+                
+                <% (6 - team.team_pokemons.count).times do %>
+                  <div class="team-pokemon-icon empty">
+                    <i class="fas fa-plus"></i>
+                  </div>
+                <% end %>
+              </div>
+              <p class="team-count"><%= team.team_pokemons.count %>/6 Pokémon</p>
+            </a>
+            <div class="team-actions">
+              <a href="/teams/<%= team.id %>/edit" class="btn-icon" title="Editar equipe">
+                <i class="fas fa-edit"></i>
+              </a>
+              <form action="/teams/<%= team.id %>" method="post" class="delete-form">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="btn-icon btn-danger" title="Excluir equipe">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <script src="/js/theme.js"></script>
+  <script>
+    document.querySelectorAll('.delete-form').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        if (!confirm('Tem certeza que deseja excluir esta equipe?')) {
+          e.preventDefault();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

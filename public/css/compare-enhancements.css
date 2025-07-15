@@ -1,0 +1,66 @@
+/* Melhorias visuais para a página de comparação */
+
+.higher {
+  color: #4CAF50 !important;
+  font-weight: bold !important;
+  position: relative;
+}
+
+.higher::after {
+  content: "↑";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 14px;
+}
+
+.comparison-container {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease;
+}
+
+.comparison-container:hover {
+  transform: translateY(-5px);
+}
+
+.pokemon-header img {
+  transition: transform 0.3s ease;
+}
+
+.pokemon-header:hover img {
+  transform: scale(1.1);
+}
+
+.effectiveness-comparison {
+  margin-top: 30px;
+  background-color: var(--background-color);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.effectiveness-comparison h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.type-effectiveness {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 15px;
+  align-items: center;
+}
+
+.type-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+}
+
+.type-chip {
+  padding: 3px 10px;
+  border-radius: 15px;
+  color: white;
+  font-size: 0.85em;
+  font-weight: bold;
+}

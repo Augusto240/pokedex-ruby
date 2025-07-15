@@ -1,0 +1,103 @@
+{
+  "count": 1302,
+  "next": "https://pokeapi.co/api/v2/pokemon?offset=72&limit=24",
+  "previous": "https://pokeapi.co/api/v2/pokemon?offset=24&limit=24",
+  "results": [
+    {
+      "name": "venomoth",
+      "url": "https://pokeapi.co/api/v2/pokemon/49/"
+    },
+    {
+      "name": "diglett",
+      "url": "https://pokeapi.co/api/v2/pokemon/50/"
+    },
+    {
+      "name": "dugtrio",
+      "url": "https://pokeapi.co/api/v2/pokemon/51/"
+    },
+    {
+      "name": "meowth",
+      "url": "https://pokeapi.co/api/v2/pokemon/52/"
+    },
+    {
+      "name": "persian",
+      "url": "https://pokeapi.co/api/v2/pokemon/53/"
+    },
+    {
+      "name": "psyduck",
+      "url": "https://pokeapi.co/api/v2/pokemon/54/"
+    },
+    {
+      "name": "golduck",
+      "url": "https://pokeapi.co/api/v2/pokemon/55/"
+    },
+    {
+      "name": "mankey",
+      "url": "https://pokeapi.co/api/v2/pokemon/56/"
+    },
+    {
+      "name": "primeape",
+      "url": "https://pokeapi.co/api/v2/pokemon/57/"
+    },
+    {
+      "name": "growlithe",
+      "url": "https://pokeapi.co/api/v2/pokemon/58/"
+    },
+    {
+      "name": "arcanine",
+      "url": "https://pokeapi.co/api/v2/pokemon/59/"
+    },
+    {
+      "name": "poliwag",
+      "url": "https://pokeapi.co/api/v2/pokemon/60/"
+    },
+    {
+      "name": "poliwhirl",
+      "url": "https://pokeapi.co/api/v2/pokemon/61/"
+    },
+    {
+      "name": "poliwrath",
+      "url": "https://pokeapi.co/api/v2/pokemon/62/"
+    },
+    {
+      "name": "abra",
+      "url": "https://pokeapi.co/api/v2/pokemon/63/"
+    },
+    {
+      "name": "kadabra",
+      "url": "https://pokeapi.co/api/v2/pokemon/64/"
+    },
+    {
+      "name": "alakazam",
+      "url": "https://pokeapi.co/api/v2/pokemon/65/"
+    },
+    {
+      "name": "machop",
+      "url": "https://pokeapi.co/api/v2/pokemon/66/"
+    },
+    {
+      "name": "machoke",
+      "url": "https://pokeapi.co/api/v2/pokemon/67/"
+    },
+    {
+      "name": "machamp",
+      "url": "https://pokeapi.co/api/v2/pokemon/68/"
+    },
+    {
+      "name": "bellsprout",
+      "url": "https://pokeapi.co/api/v2/pokemon/69/"
+    },
+    {
+      "name": "weepinbell",
+      "url": "https://pokeapi.co/api/v2/pokemon/70/"
+    },
+    {
+      "name": "victreebel",
+      "url": "https://pokeapi.co/api/v2/pokemon/71/"
+    },
+    {
+      "name": "tentacool",
+      "url": "https://pokeapi.co/api/v2/pokemon/72/"
+    }
+  ]
+}

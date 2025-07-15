@@ -1,0 +1,144 @@
+.weather-pokemon-container {
+  background-color: var(--card-color);
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin-bottom: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.weather-pokemon-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.weather-pokemon-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+  text-align: center;
+  font-size: 1.3em;
+}
+
+.weather-description {
+  text-align: center;
+  margin-bottom: 15px;
+  font-style: italic;
+  color: var(--text-color);
+  line-height: 1.4;
+  font-size: 0.95em;
+}
+
+.weather-pokemon {
+  display: flex;
+  align-items: center;
+  background-color: var(--background-color);
+  border-radius: 10px;
+  padding: 15px;
+  transition: transform 0.3s;
+}
+
+.weather-pokemon:hover {
+  transform: scale(1.02);
+}
+
+.weather-pokemon img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-right: 15px;
+}
+
+.weather-pokemon-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.weather-pokemon-info h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.weather-pokemon-types {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.weather-pokemon-types .type-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: bold;
+  color: white;
+}
+
+.weather-pokemon-info .btn-secondary {
+  align-self: flex-start;
+  margin-top: 5px;
+}
+
+.weather-loader,
+.weather-error {
+  text-align: center;
+  padding: 20px;
+}
+
+.weather-loader i,
+.weather-error i {
+  font-size: 1.8em;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+}
+
+.weather-error i {
+  color: #dc3545;
+}
+
+.weather-loader p,
+.weather-error p {
+  margin: 0;
+  color: var(--text-color);
+  opacity: 0.8;
+  font-size: 0.9em;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+@media (max-width: 500px) {
+  .weather-pokemon {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px;
+  }
+  
+  .weather-pokemon img {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  
+  .weather-pokemon-info {
+    align-items: center;
+  }
+  
+  .weather-pokemon-info .btn-secondary {
+    align-self: center;
+  }
+}
+
+@media (max-width: 350px) {
+  .weather-pokemon img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .weather-pokemon-info h4 {
+    font-size: 1.1em;
+  }
+}

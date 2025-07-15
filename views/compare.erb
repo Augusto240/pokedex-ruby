@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparar Pokémon - Pokédex Ruby</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/compare.css">
+    <link rel="stylesheet" href="/css/nav-menu.css">
+  <script src="/js/nav-menu.js" defer></script>
+</head>
+<body>
+  <%= erb :_header %>
+  <div class="back-button">
+    <a href="/" title="Voltar para a página inicial">
+      <i class="fas fa-arrow-left"></i>
+    </a>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>Comparador de Pokémon</h1>
+    </header>
+
+    <div class="comparison-container">
+      <div class="comparison-header">
+        <div class="pokemon-header pokemon1">
+          <img src="<%= @pokemon1['sprites']['other']['official-artwork']['front_default'] %>" alt="<%= @pokemon1['name'] %>">
+          <h2><%= @pokemon1['name'].capitalize %> #<%= @pokemon1['id'] %></h2>
+          <div class="pokemon-types">
+            <% @pokemon1['types'].each do |type| %>
+              <span class="type-badge <%= type['type']['name'] %>"><%= type['type']['name'].capitalize %></span>
+            <% end %>
+          </div>
+        </div>
+        
+        <div class="vs-symbol">VS</div>
+        
+        <div class="pokemon-header pokemon2">
+          <img src="<%= @pokemon2['sprites']['other']['official-artwork']['front_default'] %>" alt="<%= @pokemon2['name'] %>">
+          <h2><%= @pokemon2['name'].capitalize %> #<%= @pokemon2['id'] %></h2>
+          <div class="pokemon-types">
+            <% @pokemon2['types'].each do |type| %>
+              <span class="type-badge <%= type['type']['name'] %>"><%= type['type']['name'].capitalize %></span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="comparison-section">
+        <h3>Estatísticas Base</h3>
+        
+        <div class="stat-comparison">
+          <% @pokemon1['stats'].each_with_index do |stat1, index| %>
+            <% stat2 = @pokemon2['stats'][index] %>
+            <% stat_name = stat1['stat']['name'].gsub('-', ' ').capitalize %>
+            <% higher = stat1['base_stat'] > stat2['base_stat'] ? 1 : (stat1['base_stat'] < stat2['base_stat'] ? 2 : 0) %>
+            
+            <div class="stat-row">
+              <div class="stat-bar-container pokemon1">
+                <div class="stat-value <%= 'higher' if higher == 1 %>"><%= stat1['base_stat'] %></div>
+                <div class="stat-bar">
+                  <div class="stat-bar-inner pokemon1-color" style="width: <%= (stat1['base_stat'] / 255.0) * 100 %>%;"></div>
+                </div>
+              </div>
+              
+              <div class="stat-name"><%= stat_name %></div>
+              
+              <div class="stat-bar-container pokemon2">
+                <div class="stat-bar">
+                  <div class="stat-bar-inner pokemon2-color" style="width: <%= (stat2['base_stat'] / 255.0) * 100 %>%;"></div>
+                </div>
+                <div class="stat-value <%= 'higher' if higher == 2 %>"><%= stat2['base_stat'] %></div>
+              </div>
+            </div>
+          <% end %>
+          
+          <% 
+            total1 = @pokemon1['stats'].sum { |s| s['base_stat'] }
+            total2 = @pokemon2['stats'].sum { |s| s['base_stat'] }
+            higher_total = total1 > total2 ? 1 : (total1 < total2 ? 2 : 0)
+          %>
+          <div class="stat-row total-row">
+            <div class="stat-bar-container pokemon1">
+              <div class="stat-value <%= 'higher' if higher_total == 1 %>"><%= total1 %></div>
+              <div class="stat-bar">
+                <div class="stat-bar-inner pokemon1-color" style="width: <%= (total1 / 720.0) * 100 %>%;"></div>
+              </div>
+            </div>
+            
+            <div class="stat-name">Total</div>
+            
+            <div class="stat-bar-container pokemon2">
+              <div class="stat-bar">
+                <div class="stat-bar-inner pokemon2-color" style="width: <%= (total2 / 720.0) * 100 %>%;"></div>
+              </div>
+              <div class="stat-value <%= 'higher' if higher_total == 2 %>"><%= total2 %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="comparison-section">
+        <h3>Características</h3>
+        
+        <div class="characteristics-table">
+          <div class="characteristic-row">
+            <div class="pokemon1-value"><%= @pokemon1['height'] / 10.0 %> m</div>
+            <div class="characteristic-name">Altura</div>
+            <div class="pokemon2-value"><%= @pokemon2['height'] / 10.0 %> m</div>
+          </div>
+          
+          <div class="characteristic-row">
+            <div class="pokemon1-value"><%= @pokemon1['weight'] / 10.0 %> kg</div>
+            <div class="characteristic-name">Peso</div>
+            <div class="pokemon2-value"><%= @pokemon2['weight'] / 10.0 %> kg</div>
+          </div>
+          
+          <div class="characteristic-row">
+            <div class="pokemon1-value">
+              <% @pokemon1['abilities'].each do |ability| %>
+                <div class="ability-name"><%= ability['ability']['name'].gsub('-', ' ').capitalize %></div>
+              <% end %>
+            </div>
+            <div class="characteristic-name">Habilidades</div>
+            <div class="pokemon2-value">
+              <% @pokemon2['abilities'].each do |ability| %>
+                <div class="ability-name"><%= ability['ability']['name'].gsub('-', ' ').capitalize %></div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="compare-actions">
+        <a href="/pokemon/<%= @pokemon1['name'] %>" class="btn-primary">Detalhes de <%= @pokemon1['name'].capitalize %></a>
+        <a href="/pokemon/<%= @pokemon2['name'] %>" class="btn-primary">Detalhes de <%= @pokemon2['name'].capitalize %></a>
+      </div>
+    </div>
+
+    <div class="new-comparison">
+      <h3>Nova Comparação</h3>
+      <div class="search-container">
+        <div class="search-box">
+          <label for="pokemon1-search">Primeiro Pokémon:</label>
+          <input type="text" id="pokemon1-search" placeholder="Digite o nome de um Pokémon...">
+          <div id="pokemon1-results" class="search-results"></div>
+        </div>
+        
+        <div class="search-box">
+          <label for="pokemon2-search">Segundo Pokémon:</label>
+          <input type="text" id="pokemon2-search" placeholder="Digite o nome de um Pokémon...">
+          <div id="pokemon2-results" class="search-results"></div>
+        </div>
+      </div>
+      
+      <div class="selected-pokemon">
+        <div id="selected-pokemon1" class="selected-card">
+          <div class="placeholder">Selecione o primeiro Pokémon</div>
+        </div>
+        
+        <div id="selected-pokemon2" class="selected-card">
+          <div class="placeholder">Selecione o segundo Pokémon</div>
+        </div>
+      </div>
+      
+      <button id="compare-btn" class="btn-primary" disabled>Comparar</button>
+    </div>
+  </div>
+
+  <div class="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <script src="/js/theme.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const pokemon1Search = document.getElementById('pokemon1-search');
+      const pokemon2Search = document.getElementById('pokemon2-search');
+      const pokemon1Results = document.getElementById('pokemon1-results');
+      const pokemon2Results = document.getElementById('pokemon2-results');
+      const selectedPokemon1 = document.getElementById('selected-pokemon1');
+      const selectedPokemon2 = document.getElementById('selected-pokemon2');
+      const compareBtn = document.getElementById('compare-btn');
+      
+      let selection = {
+        pokemon1: null,
+        pokemon2: null
+      };
+      
+      function updateCompareButton() {
+        if (selection.pokemon1 && selection.pokemon2) {
+          compareBtn.disabled = false;
+        } else {
+          compareBtn.disabled = true;
+        }
+      }
+            
+      function setupSearch(input, resultsContainer, selectionKey) {
+        let debounceTimeout;
+        
+        input.addEventListener('input', function() {
+          const query = this.value.trim();
+          
+          clearTimeout(debounceTimeout);
+          
+          if (!query) {
+            resultsContainer.innerHTML = '';
+            resultsContainer.style.display = 'none';
+            return;
+          }
+          
+          debounceTimeout = setTimeout(async function() {
+            try {
+              const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+              const data = await response.json();
+              
+              resultsContainer.innerHTML = '';
+              
+              if (data.results.length === 0) {
+                resultsContainer.innerHTML = '<div class="search-no-results">Nenhum Pokémon encontrado</div>';
+              } else {
+                const resultsList = document.createElement('ul');
+                
+                data.results.forEach(pokemon => {
+                  const listItem = document.createElement('li');
+                  const link = document.createElement('a');
+                  link.href = "#";
+                  link.dataset.id = pokemon.id;
+                  link.dataset.name = pokemon.name;
+                  
+                  const thumbnail = document.createElement('img');
+                  thumbnail.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
+                  thumbnail.alt = pokemon.name;
+                  
+                  const nameSpan = document.createElement('span');
+                  nameSpan.textContent = `#${pokemon.id} - ${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}`;
+                  
+                  link.appendChild(thumbnail);
+                  link.appendChild(nameSpan);
+                  
+                  link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    selectPokemon(selectionKey, this.dataset.id, this.dataset.name);
+                  });
+                  
+                  listItem.appendChild(link);
+                  resultsList.appendChild(listItem);
+                });
+                
+                resultsContainer.appendChild(resultsList);
+              }
+              
+              resultsContainer.style.display = 'block';
+              
+            } catch (error) {
+              console.error('Erro na busca:', error);
+            }
+          }, 300);
+        });
+              
+        document.addEventListener('click', function(e) {
+          if (!resultsContainer.contains(e.target) && e.target !== input) {
+            resultsContainer.style.display = 'none';
+          }
+        });
+      }
+            
+      setupSearch(pokemon1Search, pokemon1Results, 'pokemon1');
+      setupSearch(pokemon2Search, pokemon2Results, 'pokemon2');
+            
+      function selectPokemon(selectionKey, id, name) {
+        const displayName = name.charAt(0).toUpperCase() + name.slice(1);
+        const selectedContainer = selectionKey === 'pokemon1' ? selectedPokemon1 : selectedPokemon2;
+        const searchInput = selectionKey === 'pokemon1' ? pokemon1Search : pokemon2Search;
+        const resultsContainer = selectionKey === 'pokemon1' ? pokemon1Results : pokemon2Results;
+              
+        selection[selectionKey] = { id, name };
+                
+        selectedContainer.innerHTML = `
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png" alt="${name}">
+          <p>${displayName}</p>
+        `;
+                
+        searchInput.value = '';
+        resultsContainer.style.display = 'none';
+                
+        updateCompareButton();
+      }
+            
+      compareBtn.addEventListener('click', function() {
+        if (selection.pokemon1 && selection.pokemon2) {
+          window.location.href = `/compare?p1=${selection.pokemon1.name}&p2=${selection.pokemon2.name}`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

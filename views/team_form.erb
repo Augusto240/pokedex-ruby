@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= @team ? "Editar Equipe" : "Nova Equipe" %> - Pokédex Ruby</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/teams.css">
+    <link rel="stylesheet" href="/css/nav-menu.css">
+  <script src="/js/nav-menu.js" defer></script>
+</head>
+<body>
+  <%= erb :_header %>
+  <div class="back-button">
+    <a href="/teams" title="Voltar para equipes">
+      <i class="fas fa-arrow-left"></i>
+    </a>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1><%= @team ? "Editar Equipe" : "Nova Equipe" %></h1>
+    </header>
+
+    <% if @error %>
+      <div class="error-message">
+        <%= @error %>
+      </div>
+    <% end %>
+
+    <div class="form-container">
+      <form action="<%= @team ? "/teams/#{@team.id}" : "/teams" %>" method="post">
+        <% if @team %>
+          <input type="hidden" name="_method" value="put">
+        <% end %>
+        
+        <div class="form-group">
+          <label for="name">Nome da Equipe</label>
+          <input type="text" id="name" name="name" value="<%= @team&.name %>" required>
+        </div>
+        
+        <div class="form-actions">
+          <a href="/teams" class="btn-secondary">Cancelar</a>
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-save"></i> <%= @team ? "Atualizar" : "Criar" %> Equipe
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <script src="/js/theme.js"></script>
+</body>
+</html>

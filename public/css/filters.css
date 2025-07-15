@@ -1,0 +1,155 @@
+.filter-section {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.filter-toggle-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  margin-bottom: 10px;
+}
+
+.filter-toggle-btn:hover {
+  background-color: #d32f2f;
+  transform: translateY(-2px);
+}
+
+.filter-toggle-btn.active {
+  background-color: #d32f2f;
+}
+
+.filter-count {
+  background-color: white;
+  color: var(--primary-color);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em;
+}
+
+.filter-panel {
+  background-color: var(--card-color);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.filter-panel.show {
+  display: block;
+}
+
+.filter-group {
+  margin-bottom: 20px;
+}
+
+.filter-group h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  color: var(--primary-color);
+}
+
+.type-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.type-filter {
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s;
+}
+
+.type-filter:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.type-filter.active {
+  box-shadow: 0 0 0 3px white, 0 0 0 5px currentColor;
+}
+
+.checkbox-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.checkbox-filter input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.no-results-message {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: var(--card-color);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.no-results-message i {
+  font-size: 3em;
+  color: var(--light-gray);
+  margin-bottom: 15px;
+}
+
+.no-results-message p {
+  font-size: 1.2em;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.normal { background-color: #A8A878; }
+.fire { background-color: #F08030; }
+.water { background-color: #6890F0; }
+.electric { background-color: #F8D030; }
+.grass { background-color: #78C850; }
+.ice { background-color: #98D8D8; }
+.fighting { background-color: #C03028; }
+.poison { background-color: #A040A0; }
+.ground { background-color: #E0C068; }
+.flying { background-color: #A890F0; }
+.psychic { background-color: #F85888; }
+.bug { background-color: #A8B820; }
+.rock { background-color: #B8A038; }
+.ghost { background-color: #705898; }
+.dragon { background-color: #7038F8; }
+.dark { background-color: #705848; }
+.steel { background-color: #B8B8D0; }
+.fairy { background-color: #EE99AC; }

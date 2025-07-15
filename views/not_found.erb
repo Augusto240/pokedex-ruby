@@ -6,6 +6,8 @@
   <title>Pokémon Não Encontrado</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/nav-menu.css">
+  <script src="/js/nav-menu.js" defer></script>
   <style>
     .not-found-container {
       text-align: center;
@@ -51,6 +53,7 @@
   </style>
 </head>
 <body>
+  <%= erb :_header %>
   <div class="not-found-container">
     <h1>Oh, não! Pokémon não encontrado!</h1>
     <p>Parece que o Pokémon que você procura não está por aqui.</p>

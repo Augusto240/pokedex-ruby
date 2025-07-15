@@ -38,4 +38,11 @@ class PokemonController
     db_pokemon.favorite = !db_pokemon.favorite
     db_pokemon.save
   end
+
+  def get_pokemon_types(id)
+    pokemon = @api_service.find_pokemon(id)
+    return [] unless pokemon
+  
+    pokemon['types'].map { |t| t['type']['name'] }
+  end
 end

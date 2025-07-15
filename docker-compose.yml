@@ -11,6 +11,11 @@ services:
       - db_data:/app/db
     environment:
       - RACK_ENV=development
+    # Remova ou comente esta linha se ela existir
+    # network_mode: "host"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
 
 volumes:
   gem_cache:

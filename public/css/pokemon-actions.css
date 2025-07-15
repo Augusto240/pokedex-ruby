@@ -1,0 +1,56 @@
+.pokemon-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 30px 0;
+  justify-content: center;
+}
+
+.action-button {
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.action-button i {
+  font-size: 1.2em;
+}
+
+.recommend-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.recommend-btn:hover {
+  background-color: #3e8e41;
+  transform: translateY(-3px);
+  box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
+}
+
+.compare-btn {
+  background-color: #3498db;
+  color: white;
+}
+
+.compare-btn:hover {
+  background-color: #2980b9;
+  transform: translateY(-3px);
+  box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 600px) {
+  .pokemon-actions {
+    flex-direction: column;
+  }
+  
+  .action-button {
+    width: 100%;
+    justify-content: center;
+  }
+}

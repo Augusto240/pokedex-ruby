@@ -6,26 +6,119 @@
   <title>Pokédex Ruby</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/filters.css">
+  <link rel="stylesheet" href="/css/features.css">
+  <link rel="stylesheet" href="/css/nav-menu.css">
+  <link rel="stylesheet" href="/css/filters-buttons.css">
+  <script src="/js/nav-menu.js" defer></script>
 </head>
 <body>
+  <%= erb :_header %>
   <div class="container">
     <header>
       <h1>Pokédex</h1>
       <div class="nav-tabs">
         <a href="/" class="nav-tab active">Todos</a>
         <a href="/favorites" class="nav-tab">Favoritos</a>
+        <a href="/teams" class="nav-tab">Equipes</a>
       </div>
     </header>
 
+      <div class="features-showcase">
+    <h2>Recursos Especiais</h2>
+    <div class="features-grid">
+      <a href="/game/who-is-that-pokemon" class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-question-circle"></i>
+        </div>
+        <h3>Quem é esse Pokémon?</h3>
+        <p>Teste seus conhecimentos identificando Pokémon por suas silhuetas!</p>
+      </a>
+      
+      <a href="/pokemon/25" class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <h3>Recomendador de Equipes</h3>
+        <p>Receba sugestões de equipes equilibradas para qualquer Pokémon!</p>
+        <small>(Acesse pela página de detalhes de um Pokémon)</small>
+      </a>
+      
+      <a href="/compare?p1=25&p2=6" class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-balance-scale"></i>
+        </div>
+        <h3>Comparador de Pokémon</h3>
+        <p>Compare estatísticas e habilidades entre dois Pokémon!</p>
+      </a>
+    </div>
+  </div>
+
+      <br><br>
+    <div id="weather-pokemon-container" class="weather-pokemon-container">
+      
+      </div>
+
+      <br><br><br>
     <form action="/pokemon/search" method="GET" class="search-form">
       <input type="text" name="query" placeholder="Buscar Pokémon pelo nome...">
       <button type="submit"><i class="fas fa-search"></i> Buscar</button>
     </form>
 
+    <div class="filter-section">
+      <button id="filter-toggle" class="filter-toggle-btn">
+        <i class="fas fa-filter"></i> Filtros <span class="filter-count" id="filter-count">0</span>
+      </button>
+      
+      <div id="filter-panel" class="filter-panel">
+        <div class="filter-group">
+          <h3>Filtrar por Tipo</h3>
+          <div class="type-filters">
+            <button class="type-filter normal" data-type="normal">Normal</button>
+            <button class="type-filter fire" data-type="fire">Fire</button>
+            <button class="type-filter water" data-type="water">Water</button>
+            <button class="type-filter electric" data-type="electric">Electric</button>
+            <button class="type-filter grass" data-type="grass">Grass</button>
+            <button class="type-filter ice" data-type="ice">Ice</button>
+            <button class="type-filter fighting" data-type="fighting">Fighting</button>
+            <button class="type-filter poison" data-type="poison">Poison</button>
+            <button class="type-filter ground" data-type="ground">Ground</button>
+            <button class="type-filter flying" data-type="flying">Flying</button>
+            <button class="type-filter psychic" data-type="psychic">Psychic</button>
+            <button class="type-filter bug" data-type="bug">Bug</button>
+            <button class="type-filter rock" data-type="rock">Rock</button>
+            <button class="type-filter ghost" data-type="ghost">Ghost</button>
+            <button class="type-filter dragon" data-type="dragon">Dragon</button>
+            <button class="type-filter dark" data-type="dark">Dark</button>
+            <button class="type-filter steel" data-type="steel">Steel</button>
+            <button class="type-filter fairy" data-type="fairy">Fairy</button>
+          </div>
+        </div>
+        
+        <div class="filter-group">
+          <h3>Outros Filtros</h3>
+          <div class="checkbox-filter">
+            <input type="checkbox" id="favorite-filter" name="favorite-filter">
+            <label for="favorite-filter">Apenas Favoritos</label>
+          </div>
+        </div>
+        
+        <div class="filter-actions">
+          <button id="reset-filters" class="btn-secondary">Limpar Filtros</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="no-results-message" class="no-results-message" style="display: none;">
+      <i class="fas fa-search"></i>
+      <p>Nenhum Pokémon encontrado com os filtros atuais.</p>
+    </div>
+
     <div class="pokedex-grid">
       <% @pokemons.each do |pokemon| %>
         <% id = pokemon['url'].split('/')[-1] %>
-        <div class="pokemon-card">
+        <% pokemon_types = @pokemon_controller.get_pokemon_types(id) %>
+        <div class="pokemon-card" data-types="<%= pokemon_types.join(',') %>">
           <a href="/pokemon/<%= pokemon['name'] %>">
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= id %>.png" alt="<%= pokemon['name'] %>">
             <div class="pokemon-info">
@@ -33,7 +126,7 @@
               <span class="pokemon-id">#<%= id %></span>
             </div>
           </a>
-          <button 
+          <button
             class="favorite-btn <%= pokemon['favorite'] ? 'favorited' : '' %>"
             data-id="<%= id %>"
             data-name="<%= pokemon['name'].capitalize %>"
@@ -63,5 +156,7 @@
   <script src="/js/theme.js"></script>
   <script src="/js/pokedex.js"></script>
   <script src="/js/search.js"></script>
+  <script src="/js/filters.js"></script>
+  <script src="/js/weather-pokemon.js"></script>
 </body>
 </html>

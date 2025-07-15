@@ -6,8 +6,12 @@
   <title>Pokédex: <%= @pokemon['name'].capitalize %></title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pokemon-actions.css">
+    <link rel="stylesheet" href="/css/nav-menu.css">
+  <script src="/js/nav-menu.js" defer></script>
 </head>
 <body>
+  <%= erb :_header %>
     
             <div class="back-button">
         <a href="/" title="Voltar para a página inicial">
@@ -82,6 +86,15 @@
         </div>
     </div>
     <% end %>
+
+    <div class="pokemon-actions">
+      <a href="/recommend-team/<%= @pokemon['name'] %>" class="action-button recommend-btn">
+        <i class="fas fa-users"></i> Recomendar Equipe para este Pokémon
+      </a>
+      <a href="/compare?p1=<%= @pokemon['name'] %>&p2=25" class="action-button compare-btn">
+        <i class="fas fa-balance-scale"></i> Comparar com Pikachu
+      </a>
+    </div>
 
     <div class="nav-buttons">
       <% if @prev_pokemon_id %>

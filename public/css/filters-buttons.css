@@ -1,0 +1,37 @@
+.btn-secondary {
+  background-color: var(--light-gray);
+  color: var(--text-color);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #ddd;
+  transform: translateY(-2px);
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+#reset-filters {
+  background-color: var(--light-gray);
+  color: var(--text-color);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+#reset-filters:hover {
+  background-color: #ddd;
+  transform: translateY(-2px);
+}

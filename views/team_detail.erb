@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Equipe <%= @team[:name] %> - Pokédex Ruby</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/teams.css">
+    <link rel="stylesheet" href="/css/nav-menu.css">
+  <script src="/js/nav-menu.js" defer></script>
+</head>
+<body>
+  <%= erb :_header %>
+  <div class="back-button">
+    <a href="/teams" title="Voltar para equipes">
+      <i class="fas fa-arrow-left"></i>
+    </a>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>Equipe: <%= @team[:name] %></h1>
+      <div class="team-header-actions">
+        <a href="/teams/<%= @team[:id] %>/edit" class="btn-secondary">
+          <i class="fas fa-edit"></i> Editar Equipe
+        </a>
+      </div>
+    </header>
+
+    <div class="team-detail">
+      <h2>Membros da Equipe (<%= @team[:pokemons].count %>/6)</h2>
+      
+      <% if @team[:pokemons].empty? %>
+        <div class="empty-team-message">
+          <p>Esta equipe ainda não tem Pokémon. Adicione Pokémon da Pokédex!</p>
+        </div>
+      <% end %>
+      
+      <div class="team-members">
+        <% (0...6).each do |position| %>
+          <% pokemon = @team[:pokemons].find { |p| p[:position] == position + 1 } %>
+          <div class="team-member-card <%= pokemon ? 'filled' : 'empty' %>" data-position="<%= position + 1 %>">
+            <% if pokemon %>
+              <div class="member-info">
+                <img src="<%= pokemon[:image] %>" alt="<%= pokemon[:name] %>">
+                <div class="member-details">
+                  <h3><%= pokemon[:nickname] || pokemon[:name].capitalize %></h3>
+                  <div class="member-types">
+                    <% pokemon[:types].each do |type| %>
+                      <span class="type-badge <%= type['type']['name'] %>">
+                        <%= type['type']['name'].capitalize %>
+                      </span>
+                    <% end %>
+                  </div>
+                  <% if pokemon[:nickname] %>
+                    <p class="original-name">(<%= pokemon[:name].capitalize %>)</p>
+                  <% end %>
+                </div>
+              </div>
+              <div class="member-actions">
+                <a href="/pokemon/<%= pokemon[:id] %>" class="btn-icon" title="Ver detalhes">
+                  <i class="fas fa-info-circle"></i>
+                </a>
+                <button class="btn-icon btn-danger remove-pokemon" 
+                        data-team-id="<%= @team[:id] %>" 
+                        data-position="<%= pokemon[:position] %>"
+                        title="Remover da equipe">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            <% else %>
+              <div class="empty-slot">
+                <i class="fas fa-plus"></i>
+                <p>Vazio</p>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      
+      <div id="add-pokemon-form" class="hidden">
+        <h3>Adicionar Pokémon à Equipe</h3>
+        <div class="form-group">
+          <label for="pokemon-search">Buscar Pokémon:</label>
+          <input type="text" id="pokemon-search" placeholder="Digite o nome do Pokémon...">
+          <div id="pokemon-search-results" class="search-results"></div>
+        </div>
+        
+        <div id="selected-pokemon" class="hidden">
+          <div class="selected-pokemon-card">
+            <img id="selected-pokemon-img" src="" alt="">
+            <div class="selected-pokemon-info">
+              <h4 id="selected-pokemon-name"></h4>
+              <input type="hidden" id="selected-pokemon-id">
+              <div class="form-group">
+                <label for="pokemon-nickname">Apelido (opcional):</label>
+                <input type="text" id="pokemon-nickname" placeholder="Digite um apelido...">
+              </div>
+              <div class="form-group">
+                <label for="pokemon-position">Posição na equipe:</label>
+                <select id="pokemon-position">
+                  <% (1..6).each do |pos| %>
+                    <% is_occupied = @team[:pokemons].any? { |p| p[:position] == pos } %>
+                    <option value="<%= pos %>" <%= 'disabled' if is_occupied %>>
+                      <%= pos %> <%= is_occupied ? '(ocupado)' : '' %>
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+              <button id="add-to-team-btn" class="btn-primary">
+                <i class="fas fa-plus"></i> Adicionar à Equipe
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <% if @team[:pokemons].count < 6 %>
+        <button id="show-add-form-btn" class="btn-primary">
+          <i class="fas fa-plus"></i> Adicionar Pokémon
+        </button>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="theme-toggle">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <script src="/js/theme.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {      
+      const showAddFormBtn = document.getElementById('show-add-form-btn');
+      const addPokemonForm = document.getElementById('add-pokemon-form');
+      
+      if (showAddFormBtn) {
+        showAddFormBtn.addEventListener('click', function() {
+          addPokemonForm.classList.toggle('hidden');
+          this.classList.toggle('hidden');
+        });
+      }
+
+      const searchInput = document.getElementById('pokemon-search');
+        const searchResults = document.getElementById('pokemon-search-results');
+        const selectedPokemon = document.getElementById('selected-pokemon');
+
+        if (searchInput) {
+        let debounceTimeout;
+        
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            
+            clearTimeout(debounceTimeout);
+            
+            if (!query) {
+            searchResults.innerHTML = '';
+            searchResults.style.display = 'none';
+            return;
+            }
+            
+            debounceTimeout = setTimeout(async function() {
+            try {
+                const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                searchResults.innerHTML = '';
+                
+                if (data.results.length === 0) {
+                searchResults.innerHTML = '<div class="search-no-results">Nenhum Pokémon encontrado</div>';
+                } else {
+                const resultsList = document.createElement('ul');
+                
+                data.results.forEach(pokemon => {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = "#";
+                    link.dataset.id = pokemon.id;
+                    link.dataset.name = pokemon.name;
+                    
+                    const thumbnail = document.createElement('img');
+                    thumbnail.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
+                    thumbnail.alt = pokemon.name;
+                    
+                    const nameSpan = document.createElement('span');
+                    nameSpan.textContent = `#${pokemon.id} - ${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}`;
+                    
+                    link.appendChild(thumbnail);
+                    link.appendChild(nameSpan);
+                    
+                    link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    selectPokemon(this.dataset.id, this.dataset.name);
+                    });
+                    
+                    listItem.appendChild(link);
+                    resultsList.appendChild(listItem);
+                });
+                
+                searchResults.appendChild(resultsList);
+                }
+                
+                searchResults.style.display = 'block';
+
+                const inputRect = searchInput.getBoundingClientRect();
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                searchResults.style.maxHeight = `${window.innerHeight - (inputRect.bottom + scrollTop) - 20}px`;
+                
+            } catch (error) {
+                console.error('Erro na busca:', error);
+            }
+            }, 300);
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!searchResults.contains(e.target) && e.target !== searchInput) {
+            searchResults.style.display = 'none';
+            }
+        });
+        }
+
+      function selectPokemon(id, name) {
+        document.getElementById('selected-pokemon-img').src = 
+          `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+        document.getElementById('selected-pokemon-name').textContent = name.charAt(0).toUpperCase() + name.slice(1);
+        document.getElementById('selected-pokemon-id').value = id;
+        selectedPokemon.classList.remove('hidden');
+        searchResults.style.display = 'none';
+        searchInput.value = '';
+      }
+
+      const addToTeamBtn = document.getElementById('add-to-team-btn');
+      
+      if (addToTeamBtn) {
+        addToTeamBtn.addEventListener('click', async function() {
+          const pokemonId = document.getElementById('selected-pokemon-id').value;
+          const nickname = document.getElementById('pokemon-nickname').value;
+          const position = document.getElementById('pokemon-position').value;
+          const teamId = '<%= @team[:id] %>';
+          
+          try {
+            const response = await fetch(`/api/teams/${teamId}/pokemon`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pokemon_id: pokemonId,
+                    nickname: nickname || "",
+                    position: parseInt(position)
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+              window.location.reload();
+            } else {
+              alert('Erro ao adicionar Pokémon: ' + (data.error || 'Erro desconhecido'));
+            }
+          } catch (error) {
+            console.error('Erro ao adicionar Pokémon:', error);
+            alert('Erro ao adicionar Pokémon à equipe.');
+          }
+        });
+      }
+
+      document.querySelectorAll('.remove-pokemon').forEach(button => {
+        button.addEventListener('click', async function() {
+          if (!confirm('Tem certeza que deseja remover este Pokémon da equipe?')) {
+            return;
+          }
+          
+          const teamId = this.dataset.teamId;
+          const position = this.dataset.position;
+          
+          try {
+            const response = await fetch(`/api/teams/${teamId}/pokemon/${position}`, {
+              method: 'DELETE'
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+              window.location.reload();
+            } else {
+              alert('Erro ao remover Pokémon: ' + (data.error || 'Erro desconhecido'));
+            }
+          } catch (error) {
+            console.error('Erro ao remover Pokémon:', error);
+            alert('Erro ao remover Pokémon da equipe.');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

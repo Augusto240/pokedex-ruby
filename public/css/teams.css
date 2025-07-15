@@ -1,0 +1,487 @@
+/* Estilos para a página de lista de equipes */
+.teams-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.team-card {
+  background-color: var(--card-color);
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.team-link {
+  text-decoration: none;
+  color: var(--text-color);
+  padding: 20px;
+  flex: 1;
+}
+
+.team-card h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.3em;
+}
+
+.team-preview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.team-pokemon-icon {
+  width: 70px;
+  height: 70px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-pokemon-icon img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.team-pokemon-icon.empty {
+  border: 2px dashed var(--light-gray);
+  color: var(--light-gray);
+  font-size: 1.5em;
+}
+
+.team-count {
+  margin: 0;
+  font-size: 0.9em;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.delete-form {
+  flex: 1;
+  margin: 0;
+}
+
+/* Estilos para o formulário de equipe */
+.form-container {
+  background-color: var(--card-color);
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid var(--light-gray);
+  border-radius: 5px;
+  font-size: 1em;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.error-message {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Estilos para detalhes da equipe */
+.team-header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.team-detail {
+  background-color: var(--card-color);
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.team-members {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.team-member-card {
+  background-color: var(--background-color);
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 120px;
+}
+
+.team-member-card.empty {
+  border: 2px dashed var(--light-gray);
+  justify-content: center;
+  color: var(--text-color);
+  opacity: 0.5;
+}
+
+.empty-slot {
+  text-align: center;
+}
+
+.empty-slot i {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+}
+
+.member-info img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-right: 15px;
+}
+
+.member-details h3 {
+  margin: 0 0 5px;
+  font-size: 1.2em;
+}
+
+.member-types {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.type-badge {
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 0.8em;
+  color: white;
+  font-weight: bold;
+}
+
+.original-name {
+  margin: 0;
+  font-size: 0.9em;
+  opacity: 0.7;
+}
+
+.member-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.empty-team-message {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#add-pokemon-form {
+  background-color: var(--background-color);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+#add-pokemon-form h3 {
+  margin-top: 0;
+}
+
+.selected-pokemon-card {
+  display: flex;
+  align-items: flex-start;
+  background-color: var(--card-color);
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.selected-pokemon-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-right: 20px;
+}
+
+.selected-pokemon-info {
+  flex: 1;
+}
+
+.selected-pokemon-info h4 {
+  margin-top: 0;
+  font-size: 1.3em;
+}
+
+.hidden {
+  display: none;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #d32f2f;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: var(--light-gray);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #bdbdbd;
+  transform: translateY(-2px);
+}
+
+/* Adicione ou atualize estes estilos no seu arquivo teams.css */
+
+.member-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--light-gray);
+  color: var(--text-color);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 16px;
+}
+
+.btn-icon:hover {
+  transform: scale(1.1);
+}
+
+.btn-icon.btn-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.btn-icon.btn-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.team-member-card {
+  background-color: var(--background-color);
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 120px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+
+/* Adicione estes estilos para corrigir o posicionamento dos resultados da busca */
+
+.form-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+#pokemon-search-results.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: var(--card-color);
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-top: 5px;
+}
+
+#pokemon-search-results.search-results ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#pokemon-search-results.search-results li {
+  border-bottom: 1px solid var(--light-gray);
+}
+
+#pokemon-search-results.search-results li:last-child {
+  border-bottom: none;
+}
+
+#pokemon-search-results.search-results a {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  text-decoration: none;
+  color: var(--text-color);
+  transition: background-color 0.2s;
+}
+
+#pokemon-search-results.search-results a:hover {
+  background-color: var(--light-gray);
+}
+
+#pokemon-search-results.search-results img {
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+}
+
+#pokemon-search-results.search-results span {
+  font-weight: 500;
+}
+
+#pokemon-search-results .search-no-results {
+  padding: 15px;
+  text-align: center;
+  color: #999;
+}
+
+/* Melhorar estilo dos botões na lista de equipes */
+.team-actions {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border-top: 1px solid var(--light-gray);
+  padding: 12px;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Estilos específicos para os botões de ação na lista de equipes */
+.team-actions .btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: var(--light-gray);
+  color: var(--text-color);
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+  margin: 0 5px;
+}
+
+.team-actions .btn-icon:hover {
+  transform: scale(1.1);
+  background-color: var(--background-color);
+}
+
+.team-actions .btn-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.team-actions .btn-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-form {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Layout responsivo para cards de equipe */
+@media (max-width: 500px) {
+  .team-card {
+    width: 100%;
+  }
+  
+  .team-preview {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  
+  .team-pokemon-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .team-pokemon-icon img {
+    width: 50px;
+    height: 50px;
+  }
+}
